@@ -2,7 +2,6 @@
 
 // @flow
 
-// TODO: locales
 class ChunkTranslationMap {
   constructor() {
     this.translations = new Map();

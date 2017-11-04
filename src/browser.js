@@ -19,7 +19,7 @@ export default function({fetch = window.fetch, hydrationState} = {}) {
       });
       if (unloaded.length > 0) {
         const ids = unloaded.join(',');
-        // TODO don't append prefix if injected fetch also injects prefix
+        // TODO(#3) don't append prefix if injected fetch also injects prefix
         return fetch(`/_translations?ids=${ids}`, {method: 'POST'})
           .then(r => r.json())
           .then(data => {

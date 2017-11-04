@@ -23,10 +23,9 @@ yarn add fusion-plugin-i18n
 import React from 'react';
 import App from 'fusion-react';
 import Internationalization from 'fusion-plugin-i18n';
-// TODO: Implement this plugin
-import TranslationsLoader from 'fusion-plugin-translations-loader-file';
 import fetch from 'unfetch';
 import Hello from './hello';
+import TranslationsLoader from './translation-loader';
 
 export default () => {
   const app = new App(<div></div>);
@@ -50,9 +49,26 @@ export default ({I18n}) => (ctx, next) => {
   return next();
 }
 
-// translations/en-US.json
-{
-  test: "hello ${name}"
+// src/translation-loader.js
+import {Plugin} from 'fusion-core';
+
+const translations = {
+  'en-US': {
+    test: "hello ${name}"
+  }
+}
+
+export default () => {
+  return new Plugin {
+    Service: class {
+      constructor(ctx) {
+        // locale could be determined in different ways,
+        // e.g. from ctx.headers['accept-headers'] or from a /en-US/ URL
+        this.locale = 'en-US';
+        this.translations = translations[this.locale];
+      }
+    }
+  }
 }
 ```
 

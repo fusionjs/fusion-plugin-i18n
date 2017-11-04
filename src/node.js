@@ -3,7 +3,7 @@ import querystring from 'querystring';
 import {Plugin, html} from 'fusion-core';
 
 export default function({TranslationsLoader}) {
-  // TODO refactor: this currently depends on babel plugins in framework's webpack config. Ideally these babel plugins should be part of this package, not hard-coded in framework core
+  // TODO(#4) refactor: this currently depends on babel plugins in framework's webpack config. Ideally these babel plugins should be part of this package, not hard-coded in framework core
   const chunkTranslationMap = require('../chunk-translation-map');
 
   return new Plugin({
