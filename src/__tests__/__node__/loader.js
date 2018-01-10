@@ -24,3 +24,8 @@ test('loader', async t => {
 
   t.end();
 });
+
+test('no translations dir', t => {
+  t.doesNotThrow(createLoader);
+  t.end();
+});
