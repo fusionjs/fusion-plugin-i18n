@@ -3,8 +3,7 @@ import querystring from 'querystring';
 import {createOptionalToken} from 'fusion-tokens';
 import {withDependencies, withMiddleware, memoize, html} from 'fusion-core';
 
-export const I18nLoaderToken = () =>
-  createOptionalToken('I18nLoaderToken', null);
+export const I18nLoaderToken = createOptionalToken('I18nLoaderToken', null);
 export default withDependencies({
   loadTranslations: I18nLoaderToken,
 })(({loadTranslations}) => {

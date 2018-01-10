@@ -17,8 +17,10 @@ function loadTranslations() {
     );
   }
 }
-export const HydrationStateToken = () =>
-  createOptionalToken('HydrationStateToken', null);
+export const HydrationStateToken = createOptionalToken(
+  'HydrationStateToken',
+  null
+);
 export default withDependencies({
   fetch: FetchToken,
   hydrationState: HydrationStateToken,
