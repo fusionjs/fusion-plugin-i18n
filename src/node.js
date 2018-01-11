@@ -26,7 +26,7 @@ export default withDependencies({
     }
   }
   const plugin = {of: memoize(ctx => new I18n(ctx))};
-  return withMiddleware(async (ctx, next) => {
+  return withMiddleware(plugin, async (ctx, next) => {
     if (ctx.element) {
       await next();
       const i18n = plugin.of(ctx);
@@ -61,5 +61,5 @@ export default withDependencies({
     } else {
       return next();
     }
-  }, plugin);
+  });
 });

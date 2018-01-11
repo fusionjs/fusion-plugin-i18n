@@ -2254,9 +2254,9 @@ functional-red-black-tree@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
 
-fusion-core@^0.3.0-0:
-  version "0.3.0-0"
-  resolved "https://registry.yarnpkg.com/fusion-core/-/fusion-core-0.3.0-0.tgz#23ff8c033486b948d0a33e69d7b3ef23da49535e"
+fusion-core@^0.3.0-2:
+  version "0.3.0-2"
+  resolved "https://registry.yarnpkg.com/fusion-core/-/fusion-core-0.3.0-2.tgz#cbbe19f688d00b8a2ee948293e6098dbd1a10988"
   dependencies:
     koa "^2.3.0"
     koa-compose "^4.0.0"
