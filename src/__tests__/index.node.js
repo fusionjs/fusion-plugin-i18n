@@ -2,7 +2,7 @@
 
 import test from 'tape-cup';
 import {consumeSanitizedHTML} from 'fusion-core';
-import I18n from "../node";
+import I18n from '../node';
 
 test('translate', async t => {
   const data = {test: 'hello', interpolated: 'hi ${value}'};
@@ -25,7 +25,7 @@ test('ssr', async t => {
   const data = {test: 'hello</div>', interpolated: 'hi ${value}'};
 
   // eslint-disable-next-line import/no-unresolved
-  const chunkTranslationMap = require("./chunk-translation-map"); // relative to ./dist-tests
+  const chunkTranslationMap = require('./chunk-translation-map'); // relative to ./dist-tests
   chunkTranslationMap.add('a.js', [0], Object.keys(data));
 
   const ctx = {
@@ -54,7 +54,7 @@ test('endpoint', async t => {
   const data = {test: 'hello', interpolated: 'hi ${value}'};
 
   // eslint-disable-next-line import/no-unresolved
-  const chunkTranslationMap = require("./chunk-translation-map"); // relative to ./dist-tests
+  const chunkTranslationMap = require('./chunk-translation-map'); // relative to ./dist-tests
   chunkTranslationMap.add('a.js', [0], Object.keys(data));
 
   const ctx = {
