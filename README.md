@@ -117,7 +117,7 @@ __NODE__
 - `I18n` - the core I18n library
 - `I18nLoader: (ctx: Context) => ({locale: string, translations: Object<string, string>})` - A function that provides translations
   - `ctx: {headers: {'accept-language': string}}` - A Koa context object
-- `fetch` - a [`fetch`](https://developer.mozilla.org/en_US/docs/Web/API/Fetch_API) implementation
+- `fetch` - a [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) implementation
 
 #### Factory
 
