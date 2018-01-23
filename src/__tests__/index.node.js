@@ -10,7 +10,9 @@ test('translate', async t => {
   const data = {test: 'hello', interpolated: 'hi ${value}'};
   const app = new App('el', el => el);
   app.register(I18nToken, I18n);
-  app.register(I18nLoaderToken, () => ({translations: data, locale: 'en_US'}));
+  app.register(I18nLoaderToken, {
+    from: () => ({translations: data, locale: 'en_US'}),
+  });
   app.middleware({i18n: I18nToken}, ({i18n}) => {
     return (ctx, next) => {
       const translator = i18n.from(ctx);
@@ -43,7 +45,7 @@ test('ssr', async t => {
     memoized: new Map(),
   };
   const deps = {
-    loadTranslations: () => ({translations: data, locale: 'en-US'}),
+    loader: {from: () => ({translations: data, locale: 'en-US'})},
   };
   const i18n = I18n.provides(deps);
 
@@ -77,7 +79,7 @@ test('endpoint', async t => {
   };
 
   const deps = {
-    loadTranslations: () => ({translations: data, locale: 'en-US'}),
+    loader: {from: () => ({translations: data, locale: 'en-US'})},
   };
   const i18n = I18n.provides(deps);
   await I18n.middleware(deps, i18n)(ctx, () => Promise.resolve());
@@ -96,7 +98,7 @@ test('non matched route', async t => {
   };
 
   const deps = {
-    loadTranslations: () => ({translations: data, locale: 'en-US'}),
+    loader: {from: () => ({translations: data, locale: 'en-US'})},
   };
   const i18n = I18n.provides(deps);
   await I18n.middleware(deps, i18n)(ctx, () => Promise.resolve());
