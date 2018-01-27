@@ -30,11 +30,11 @@
   },
   "dependencies": {
     "locale": "^0.1.0",
-    "rollup": "^0.55.0"
+    "rollup": "^0.55.1"
   },
   "devDependencies": {
     "babel-eslint": "8.2.1",
-    "create-universal-package": "3.2.6",
+    "create-universal-package": "3.3.0",
     "eslint": "4.16.0",
     "eslint-config-fusion": "0.2.1",
     "eslint-plugin-cup": "1.0.0",

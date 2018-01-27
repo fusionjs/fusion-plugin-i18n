@@ -11,7 +11,7 @@ import {createPlugin, memoize, html} from 'fusion-core';
 import createLoader from './loader';
 
 export const I18nLoaderToken = createOptionalToken('I18nLoaderToken', null);
-export default createPlugin({
+export default __NODE__ && createPlugin({
   deps: {
     loader: I18nLoaderToken,
   },

@@ -27,7 +27,7 @@ export const HydrationStateToken = createOptionalToken(
   'HydrationStateToken',
   null
 );
-export default createPlugin({
+export default __BROWSER__ && createPlugin({
   deps: {
     fetch: FetchToken,
     hydrationState: HydrationStateToken,
