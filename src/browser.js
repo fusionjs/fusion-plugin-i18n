@@ -5,8 +5,8 @@
  */
 
 /* eslint-env browser */
-import {createOptionalToken, FetchToken} from 'fusion-tokens';
-import {createPlugin, unescape} from 'fusion-core';
+import {FetchToken} from 'fusion-tokens';
+import {createPlugin, unescape, createToken} from 'fusion-core';
 
 function loadTranslations() {
   const element = document.getElementById('__TRANSLATIONS__');
@@ -23,17 +23,14 @@ function loadTranslations() {
     );
   }
 }
-export const HydrationStateToken = createOptionalToken(
-  'HydrationStateToken',
-  null
-);
+export const HydrationStateToken = createToken('HydrationStateToken');
 export default __BROWSER__ &&
   createPlugin({
     deps: {
       fetch: FetchToken,
-      hydrationState: HydrationStateToken,
+      hydrationState: HydrationStateToken.optional,
     },
-    provides: ({fetch = window.fetch, hydrationState} = {}) => {
+    provides: ({fetch = window.fetch, hydrationState = {}} = {}) => {
       class I18n {
         constructor() {
           const {chunks, translations} = hydrationState || loadTranslations();
