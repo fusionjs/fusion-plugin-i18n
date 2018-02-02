@@ -30,7 +30,7 @@ export default __BROWSER__ &&
       fetch: FetchToken,
       hydrationState: HydrationStateToken.optional,
     },
-    provides: ({fetch = window.fetch, hydrationState = {}} = {}) => {
+    provides: ({fetch = window.fetch, hydrationState} = {}) => {
       class I18n {
         constructor() {
           const {chunks, translations} = hydrationState || loadTranslations();
