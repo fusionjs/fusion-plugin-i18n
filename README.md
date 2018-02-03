@@ -117,7 +117,7 @@ __BROWSER__ && app.register(FetchToken, fetch);
 
 Name | Type | Default | Description
 -|-|-|-
-- `I18nLoaderToken` | `{from: (ctx: Context) => ({locale: string, translations: Object<string, string>})}` | A function that provides translations.  `ctx: {headers: {'accept-language': string}}` is a Koa context object.  Server-side only.
+`I18nLoaderToken` | `{from: (ctx: Context) => ({locale: string, translations: Object<string, string>})}` | `createI18nLoader()` | A function that provides translations.  `ctx: {headers: {'accept-language': string}}` is a Koa context object.  Server-side only.
 `HydrationStateToken` | `{chunks: Array, translations: Object}` | `undefined` | Sets the hydrated state in the client.  Browser only.
 `FetchToken` | `(url: string, options: Object) => Promise` | `window.fetch` | A [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) implementation.  Browser-only.
 
