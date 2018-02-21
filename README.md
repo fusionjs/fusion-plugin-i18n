@@ -12,7 +12,20 @@ If you're using React, you should use [`fusion-plugin-i18n-react`](https://githu
 
 ### Table of contents
 
-TBD
+* [fusion-plugin-i18n](#fusion-plugin-i18n)
+  * [Table of contents](#table-of-contents)
+  * [Installation](#installation)
+  * [Usage](#usage)
+    * [Simple middleware](#simple-middleware)
+  * [Setup](#setup)
+  * [API](#api)
+    * [Registration API](#registration-api)
+      * [`I18nLoaderToken`](#i18nloadertoken)
+      * [`HydrationStateToken`](#hydrationstatetoken)
+      * [`FetchToken`](#fetchtoken)
+    * [Service API](#service-api)
+  * [Other examples](#other-examples)
+    * [Custom translations loader example](#custom-translations-loader-example)
 
 ---
 
