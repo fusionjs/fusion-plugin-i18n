@@ -41,7 +41,7 @@ yarn add fusion-plugin-i18n
 
 #### Simple middleware
 
-The plugin provides a programatic interface which exposes `translate`.  See [Service API](#service-api) for more details.
+The plugin provides a programmatic interface which exposes `translate`.  See [Service API](#service-api) for more details.
 
 ```js
 // src/some-middleware-plugin.js
