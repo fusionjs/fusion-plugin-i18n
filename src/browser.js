@@ -11,6 +11,8 @@ import {FetchToken} from 'fusion-tokens';
 import {createPlugin, unescape, createToken} from 'fusion-core';
 import type {FusionPlugin, Token} from 'fusion-core';
 
+import type {I18nDepsType, I18nServiceType} from './flow.js';
+
 function loadTranslations() {
   const element = document.getElementById('__TRANSLATIONS__');
   if (!element) {
@@ -80,4 +82,4 @@ const plugin =
     },
   });
 
-export default ((plugin: any): FusionPlugin<*, *>);
+export default ((plugin: any): FusionPlugin<I18nDepsType, I18nServiceType>);

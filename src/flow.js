@@ -7,6 +7,8 @@
  */
 
 import {FetchToken} from 'fusion-tokens';
+import type {Context} from 'fusion-core';
+
 import {HydrationStateToken} from './browser';
 
 export type I18nDepsType = {
@@ -16,9 +18,9 @@ export type I18nDepsType = {
 
 export type I18nServiceType = {
   from: (
-    ctx: string
+    ctx?: Context
   ) => {
-    load: (chunkIds: Array<number>) => void,
-    translate: (key: string, interpolations: Object) => string,
+    load: (chunkIds: Array<number>) => Promise<*>,
+    translate: (key: string, interpolations?: Object) => string,
   },
 };
