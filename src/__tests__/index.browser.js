@@ -37,8 +37,7 @@ test('hydration from element', t => {
   translations.setAttribute('type', 'application/json');
   translations.setAttribute('id', '__TRANSLATIONS__');
   translations.textContent = JSON.stringify(hydrationState);
-  // $FlowFixMe
-  document.body.appendChild(translations);
+  document.body && document.body.appendChild(translations);
 
   t.plan(2);
   if (!I18n.provides) {
@@ -48,8 +47,7 @@ test('hydration from element', t => {
   const i18n = I18n.provides({hydrationState}).from();
   t.equals(i18n.translate('test'), 'hello');
   t.equals(i18n.translate('interpolated', {value: 'world'}), 'hi world');
-  // $FlowFixMe
-  document.body.removeChild(translations);
+  document.body && document.body.removeChild(translations);
   t.end();
 });
 
@@ -58,8 +56,7 @@ test('hydration parse error', t => {
   translations.setAttribute('type', 'application/json');
   translations.setAttribute('id', '__TRANSLATIONS__');
   translations.textContent = 'abcdomg-"asddf}';
-  // $FlowFixMe
-  document.body.appendChild(translations);
+  document.body && document.body.appendChild(translations);
 
   t.plan(1);
   if (!I18n.provides) {
@@ -76,8 +73,7 @@ test('hydration parse error', t => {
       '[fusion-plugin-i18n] - Error parsing __TRANSLATIONS__ element content'
     );
   } finally {
-    // $FlowFixMe
-    document.body.removeChild(translations);
+    document.body && document.body.removeChild(translations);
     t.end();
   }
 });
