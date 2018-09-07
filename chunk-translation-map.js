@@ -9,17 +9,17 @@
 /* eslint-env node */
 
 class ChunkTranslationMap {
-  translations: Map<number | string, Map<string, Set<string>>>;
+  /*:: translations: Map<number | string, Map<string, Set<string>>>; */
 
   constructor() {
     this.translations = new Map();
   }
 
   add(
-    filename: string,
-    chunkIds: Array<number | string>,
-    translations: Array<string>
-  ): void {
+    filename /*: string */,
+    chunkIds /*: Array<number | string> */,
+    translations /*: Array<string> */
+  ) /*: void */ {
     for (const chunkId of chunkIds) {
       if (!this.translations.has(chunkId)) {
         this.translations.set(chunkId, new Map());
@@ -44,10 +44,10 @@ class ChunkTranslationMap {
   }
 
   dispose(
-    filename: string,
-    chunkIds: Array<number>,
-    translations: Array<string>
-  ): void {
+    filename /*: string */,
+    chunkIds /*: Array<number> */,
+    translations /*: Array<string> */
+  ) /*: void */ {
     for (const chunkId of chunkIds) {
       const translationsForChunk = this.translations.get(chunkId);
       if (!translationsForChunk)
@@ -67,7 +67,7 @@ class ChunkTranslationMap {
     }
   }
 
-  translationsForChunk(chunkId: number | string): Iterator<string> {
+  translationsForChunk(chunkId /*: number | string */) /*: Iterator<string> */ {
     if (!this.translations.has(chunkId)) {
       return new Set().keys();
     }

@@ -51,7 +51,7 @@ const plugin: FusionPlugin<I18nDepsType, I18nServiceType> = createPlugin({
     fetch: FetchToken.optional,
     hydrationState: HydrationStateToken.optional,
   },
-  provides: ({fetch: Fetch = window.fetch, hydrationState} = {}) => {
+  provides: ({fetch = window.fetch, hydrationState} = {}) => {
     class I18n {
       loadedChunks: Array<number | string>;
       localeCode: ?string;

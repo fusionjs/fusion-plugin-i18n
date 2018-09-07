@@ -80,6 +80,7 @@ test('ssr', async t => {
     consumeSanitizedHTML(ctx.template.body[0]).match('hello')[0],
     'hello'
   );
+  // $FlowFixMe
   t.equals(consumeSanitizedHTML(ctx.template.body[0]).match('</div>'), null);
 
   chunkTranslationMap.dispose('a.js', [0], Object.keys(data));
