@@ -15,7 +15,7 @@ import type {
   I18nDepsType,
   I18nServiceType,
   TranslationsObjectType,
-} from './flow.js';
+} from './types.js';
 
 type LoadedTranslationsType = {
   chunks?: Array<number | string>,

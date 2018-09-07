@@ -13,7 +13,7 @@ import path from 'path';
 import {memoize} from 'fusion-core';
 import type {Context} from 'fusion-core';
 
-import type {TranslationsObjectType} from './flow.js';
+import type {TranslationsObjectType} from './types.js';
 
 export type I18nLoaderType = {
   from: (

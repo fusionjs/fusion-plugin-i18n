@@ -20,7 +20,7 @@ import type {
   I18nDepsType,
   I18nServiceType,
   TranslationsObjectType,
-} from './flow.js';
+} from './types.js';
 
 const plugin: FusionPlugin<I18nDepsType, I18nServiceType> = createPlugin({
   deps: {
