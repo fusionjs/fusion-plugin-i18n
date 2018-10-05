@@ -2,13 +2,27 @@
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
+ *
+ * @flow
  */
 
 /* eslint-env browser */
 import {FetchToken} from 'fusion-tokens';
 import {createPlugin, unescape, createToken} from 'fusion-core';
+import type {FusionPlugin, Token} from 'fusion-core';
 
-function loadTranslations() {
+import type {
+  I18nDepsType,
+  I18nServiceType,
+  TranslationsObjectType,
+} from './types.js';
+
+type LoadedTranslationsType = {
+  chunks?: Array<number | string>,
+  localeCode?: string,
+  translations?: TranslationsObjectType,
+};
+function loadTranslations(): LoadedTranslationsType {
   const element = document.getElementById('__TRANSLATIONS__');
   if (!element) {
     throw new Error(
@@ -23,8 +37,18 @@ function loadTranslations() {
     );
   }
 }
-export const HydrationStateToken = createToken('HydrationStateToken');
-export default __BROWSER__ &&
+
+type HydrationStateType = {
+  chunks: Array<number | string>,
+  localeCode?: string,
+  translations: TranslationsObjectType,
+};
+export const HydrationStateToken: Token<HydrationStateType> = createToken(
+  'HydrationStateToken'
+);
+
+type PluginType = FusionPlugin<I18nDepsType, I18nServiceType>;
+const pluginFactory: () => PluginType = () =>
   createPlugin({
     deps: {
       fetch: FetchToken.optional,
@@ -32,29 +56,52 @@ export default __BROWSER__ &&
     },
     provides: ({fetch = window.fetch, hydrationState} = {}) => {
       class I18n {
+        loadedChunks: Array<number | string>;
+        localeCode: ?string;
+        translationMap: TranslationsObjectType;
+
         constructor() {
-          const {chunks, translations} = hydrationState || loadTranslations();
-          this.loadedChunks = chunks || [];
+          const {chunks, localeCode, translations} =
+            hydrationState || loadTranslations();
+          this.loadedChunks = (chunks: Array<number | string> | void) || [];
+          this.localeCode = localeCode;
           this.translationMap = translations || {};
         }
-        load(chunkIds) {
+        async load(chunkIds: Array<number | string>): Promise<void> {
           const unloaded = chunkIds.filter(id => {
             return this.loadedChunks.indexOf(id) < 0;
           });
+          const fetchOpts = {
+            method: 'POST',
+            ...(this.localeCode
+              ? {headers: {'X-Fusion-Locale-Code': this.localeCode}}
+              : {}),
+          };
           if (unloaded.length > 0) {
+            // Don't try to load translations again if a request is already in
+            // flight. This means that we need to add unloaded chunks to
+            // loadedChunks optimistically and remove them if some error happens
+            this.loadedChunks = [...this.loadedChunks, ...unloaded];
+
             const ids = unloaded.join(',');
             // TODO(#3) don't append prefix if injected fetch also injects prefix
-            return fetch(`/_translations?ids=${ids}`, {method: 'POST'})
+            return fetch(`/_translations?ids=${ids}`, fetchOpts)
               .then(r => r.json())
-              .then(data => {
+              .then((data: {[string]: string}) => {
                 for (const key in data) this.translationMap[key] = data[key];
-                unloaded.forEach(id => {
-                  this.loadedChunks[id] = true;
-                });
+              })
+              .catch((err: Error) => {
+                // An error occurred, so remove the chunks we were trying to load
+                // from loadedChunks. This allows us to try to load those chunk
+                // translations again
+                this.loadedChunks = this.loadedChunks.filter(
+                  chunk => unloaded.indexOf(chunk) === -1
+                );
+                throw err;
               });
           }
         }
-        translate(key, interpolations = {}) {
+        translate(key: string, interpolations: TranslationsObjectType = {}) {
           const template = this.translationMap[key];
           return template
             ? template.replace(/\${(.*?)}/g, (_, k) => interpolations[k])
@@ -65,3 +112,5 @@ export default __BROWSER__ &&
       return {from: () => i18n};
     },
   });
+
+export default ((__BROWSER__ && pluginFactory(): any): PluginType);

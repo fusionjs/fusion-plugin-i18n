@@ -2,30 +2,47 @@
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
+ *
+ * @flow
  */
 
 /* eslint-env node */
-import querystring from 'querystring';
-import {createToken, createPlugin, memoize, html} from 'fusion-core';
-import createLoader from './loader';
 
-export const I18nLoaderToken = createToken('I18nLoaderToken');
-export default __NODE__ &&
+import querystring from 'querystring';
+import {Locale} from 'locale';
+
+import {createPlugin, memoize, html} from 'fusion-core';
+import type {FusionPlugin} from 'fusion-core';
+
+import {I18nLoaderToken} from './tokens.js';
+import createLoader from './loader.js';
+import type {
+  I18nDepsType,
+  I18nServiceType,
+  TranslationsObjectType,
+} from './types.js';
+
+type PluginType = FusionPlugin<I18nDepsType, I18nServiceType>;
+const pluginFactory: () => PluginType = () =>
   createPlugin({
     deps: {
       loader: I18nLoaderToken.optional,
     },
     provides: ({loader}) => {
       class I18n {
+        translations: TranslationsObjectType;
+        locale: string | Locale;
+
         constructor(ctx) {
           if (!loader) {
             loader = createLoader();
           }
           const {translations, locale} = loader.from(ctx);
+          // eslint-disable-next-line no-console
           this.translations = translations;
           this.locale = locale;
         }
-        load() {} //mirror client API
+        async load() {} //mirror client API
         translate(key, interpolations = {}) {
           const template = this.translations[key];
           return template != null
@@ -33,8 +50,9 @@ export default __NODE__ &&
             : key;
         }
       }
-      const plugin = {from: memoize(ctx => new I18n(ctx))};
-      return plugin;
+
+      const service = {from: memoize(ctx => new I18n(ctx))};
+      return service;
     },
     middleware: (_, plugin) => {
       // TODO(#4) refactor: this currently depends on babel plugins in framework's webpack config.
@@ -46,17 +64,23 @@ export default __NODE__ &&
           const i18n = plugin.from(ctx);
 
           // get the webpack chunks that are used and serialize their translations
-          const chunks = [...ctx.syncChunks, ...ctx.preloadChunks];
+          const chunks: Array<string | number> = [
+            ...ctx.syncChunks,
+            ...ctx.preloadChunks,
+          ];
           const translations = {};
           chunks.forEach(id => {
             const keys = Array.from(
               chunkTranslationMap.translationsForChunk(id)
             );
             keys.forEach(key => {
-              translations[key] = i18n.translations[key];
+              translations[key] = i18n.translations && i18n.translations[key];
             });
           });
-          const serialized = JSON.stringify({chunks, translations});
+          // i18n.locale is actually a locale.Locale instance
+          // $FlowFixMe
+          const localeCode = i18n.locale.code;
+          const serialized = JSON.stringify({chunks, localeCode, translations});
           const script = html`<script type='application/json' id="__TRANSLATIONS__">${serialized}</script>`; // consumed by ./browser
           ctx.template.body.push(script);
         } else if (ctx.path === '/_translations') {
@@ -67,7 +91,7 @@ export default __NODE__ &&
           chunks.forEach(id => {
             const keys = [...chunkTranslationMap.translationsForChunk(id)];
             keys.forEach(key => {
-              translations[key] = i18n.translations[key];
+              translations[key] = i18n.translations && i18n.translations[key];
             });
           });
           ctx.body = translations;
@@ -78,3 +102,5 @@ export default __NODE__ &&
       };
     },
   });
+
+export default ((__NODE__ && pluginFactory(): any): PluginType);
