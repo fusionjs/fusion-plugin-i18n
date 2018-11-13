@@ -78,10 +78,11 @@ const pluginFactory: () => PluginType = () =>
             });
           });
           // i18n.locale is actually a locale.Locale instance
-          if (typeof i18n.locale === 'string' || !i18n.locale) {
-            throw new Error('i18n.locale is not an instance of Locale');
+          if (!i18n.locale) {
+            throw new Error('i18n.locale was empty');
           }
-          const localeCode = i18n.locale.code;
+          const localeCode =
+            typeof i18n.locale === 'string' ? i18n.locale : i18n.locale.code;
           const serialized = JSON.stringify({chunks, localeCode, translations});
           const script = html`
             <script type="application/json" id="__TRANSLATIONS__">
