@@ -21,7 +21,9 @@ export type I18nLoaderType = {
   ) => {locale: string | Locale, translations: TranslationsObjectType},
 };
 
-const loader: () => I18nLoaderType = () => {
+const defaultResolveLocales = (ctx: Context) => ctx.headers['accept-language'];
+
+const loader: () => I18nLoaderType = (resolveLocales = defaultResolveLocales) => {
   const readDir = root => {
     try {
       return fs.readdirSync(root);
@@ -44,7 +46,7 @@ const loader: () => I18nLoaderType = () => {
 
   return {
     from: memoize(ctx => {
-      const expectedLocales = new Locales(ctx.headers['accept-language']);
+      const expectedLocales = new Locales(defaultResolveLocales(ctx));
       const locale = expectedLocales.best(supportedLocales);
       const translations: TranslationsObjectType = data[locale.normalized];
       return {translations, locale};
