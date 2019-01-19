@@ -23,7 +23,9 @@ export type I18nLoaderType = {
 
 const defaultResolveLocales = (ctx: Context) => ctx.headers['accept-language'];
 
-const loader: () => I18nLoaderType = (resolveLocales = defaultResolveLocales) => {
+const loader: () => I18nLoaderType = (
+  resolveLocales = defaultResolveLocales
+) => {
   const readDir = root => {
     try {
       return fs.readdirSync(root);
