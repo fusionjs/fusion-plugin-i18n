@@ -20,12 +20,15 @@ export type I18nLoaderType = {
     ctx: Context
   ) => {locale: string | Locale, translations: TranslationsObjectType},
 };
+export type LocaleResolverType = (ctx: Context) => string;
+export type LoaderFactoryType = (
+  resolveLocales?: LocaleResolverType
+) => I18nLoaderType;
 
-const defaultResolveLocales = (ctx: Context) => ctx.headers['accept-language'];
+const defaultResolveLocales: LocaleResolverType = ctx =>
+  ctx.headers['accept-language'];
 
-const loader: () => I18nLoaderType = (
-  resolveLocales = defaultResolveLocales
-) => {
+const loader: LoaderFactoryType = (resolveLocales = defaultResolveLocales) => {
   const readDir = root => {
     try {
       return fs.readdirSync(root);
