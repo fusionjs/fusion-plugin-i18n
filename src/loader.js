@@ -51,7 +51,7 @@ const loader: LoaderFactoryType = (resolveLocales = defaultResolveLocales) => {
 
   return {
     from: memoize(ctx => {
-      const expectedLocales = new Locales(defaultResolveLocales(ctx));
+      const expectedLocales = new Locales(resolveLocales(ctx));
       const locale = expectedLocales.best(supportedLocales);
       const translations: TranslationsObjectType = data[locale.normalized];
       return {translations, locale};
