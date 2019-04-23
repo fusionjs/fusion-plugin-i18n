@@ -107,7 +107,9 @@ const pluginFactory: () => PluginType = () =>
         translate(key: string, interpolations: TranslationsObjectType = {}) {
           const template = this.translationMap[key];
           return template
-            ? template.replace(/\${(.*?)}/g, (_, k) => interpolations[k])
+            ? template.replace(/\${(.*?)}/g, (_, k) =>
+                interpolations[k] ? interpolations[k] : '${' + k + '}'
+              )
             : key;
         }
       }
