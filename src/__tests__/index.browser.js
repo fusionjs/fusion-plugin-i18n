@@ -28,8 +28,14 @@ test('hydration', t => {
   const mockContext: Context = ({}: any);
   const i18n = I18n.provides({hydrationState}).from(mockContext);
   t.equals(i18n.translate('test'), 'hello');
-  t.equals(i18n.translate('interpolated', {adjective: 'big', noun: 'world'}), 'hi big world');
-  t.equals(i18n.translate('interpolated', {noun: 'world'}), 'hi ${adjective} world');
+  t.equals(
+    i18n.translate('interpolated', {adjective: 'big', noun: 'world'}),
+    'hi big world'
+  );
+  t.equals(
+    i18n.translate('interpolated', {noun: 'world'}),
+    'hi ${adjective} world'
+  );
   t.equals(i18n.translate('interpolated'), 'hi ${adjective} ${noun}');
   t.end();
 });
