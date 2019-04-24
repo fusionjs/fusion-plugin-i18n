@@ -37,6 +37,10 @@ test('translate', async t => {
         translator.translate('interpolated', {noun: 'world'}),
         'hi ${adjective} world'
       );
+      t.equals(
+        translator.translate('interpolated', {adjective: '', noun: 0}),
+        'hi  0'
+      );
       t.equals(translator.translate('interpolated'), 'hi ${adjective} ${noun}');
       return next();
     };

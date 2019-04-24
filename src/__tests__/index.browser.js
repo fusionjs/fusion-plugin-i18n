@@ -19,7 +19,7 @@ test('hydration', t => {
     chunks: [0],
     translations: {test: 'hello', interpolated: 'hi ${adjective} ${noun}'},
   };
-  t.plan(4);
+  t.plan(5);
   if (!I18n.provides) {
     t.end();
     return;
@@ -36,6 +36,7 @@ test('hydration', t => {
     i18n.translate('interpolated', {noun: 'world'}),
     'hi ${adjective} world'
   );
+  t.equals(i18n.translate('interpolated', {adjective: '', noun: 0}), 'hi  0');
   t.equals(i18n.translate('interpolated'), 'hi ${adjective} ${noun}');
   t.end();
 });
