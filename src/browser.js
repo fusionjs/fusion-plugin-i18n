@@ -18,7 +18,6 @@ import type {
 } from './types.js';
 
 type LoadedTranslationsType = {
-  chunks?: Array<number | string>,
   localeCode?: string,
   translations?: TranslationsObjectType,
 };
@@ -39,7 +38,6 @@ function loadTranslations(): LoadedTranslationsType {
 }
 
 type HydrationStateType = {
-  chunks: Array<number | string>,
   localeCode?: string,
   translations: TranslationsObjectType,
 };
@@ -56,20 +54,20 @@ const pluginFactory: () => PluginType = () =>
     },
     provides: ({fetch = window.fetch, hydrationState} = {}) => {
       class I18n {
-        loadedChunks: Array<number | string>;
         localeCode: ?string;
         translationMap: TranslationsObjectType;
 
         constructor() {
-          const {chunks, localeCode, translations} =
+          const {localeCode, translations} =
             hydrationState || loadTranslations();
-          this.loadedChunks = (chunks: Array<number | string> | void) || [];
+            // this.loadedChunks = (chunks: Array<number | string> | void) || [];
           this.localeCode = localeCode;
           this.translationMap = translations || {};
         }
-        async load(chunkIds: Array<number | string>): Promise<void> {
-          const unloaded = chunkIds.filter(id => {
-            return this.loadedChunks.indexOf(id) < 0;
+        async load(translationKeys: Array<string>): Promise<void> {
+          const loadedKeys = Object.keys(this.translationMap);
+          const unloaded = translationKeys.filter(key => {
+            return loadedKeys.indexOf(key) < 0;
           });
           const fetchOpts = {
             method: 'POST',
@@ -81,25 +79,29 @@ const pluginFactory: () => PluginType = () =>
             },
           };
           if (unloaded.length > 0) {
+            // TODO
             // Don't try to load translations again if a request is already in
             // flight. This means that we need to add unloaded chunks to
             // loadedChunks optimistically and remove them if some error happens
-            this.loadedChunks = [...this.loadedChunks, ...unloaded];
+            // this.loadedKeys = [...loadedKeys, ...unloaded];
 
-            const ids = unloaded.join(',');
+            const keys = unloaded.join(',');
             // TODO(#3) don't append prefix if injected fetch also injects prefix
-            return fetch(`/_translations?ids=${ids}`, fetchOpts)
+            return fetch(`/_translations?keys=${keys}`, fetchOpts)
               .then(r => r.json())
               .then((data: {[string]: string}) => {
                 for (const key in data) this.translationMap[key] = data[key];
               })
               .catch((err: Error) => {
+                // TODO
                 // An error occurred, so remove the chunks we were trying to load
                 // from loadedChunks. This allows us to try to load those chunk
                 // translations again
+                /*
                 this.loadedChunks = this.loadedChunks.filter(
                   chunk => unloaded.indexOf(chunk) === -1
                 );
+                */
                 throw err;
               });
           }
